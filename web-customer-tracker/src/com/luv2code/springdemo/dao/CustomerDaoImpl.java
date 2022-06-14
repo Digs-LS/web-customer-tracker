@@ -39,7 +39,32 @@ public class CustomerDaoImpl implements CustomerDao {
 		// get the hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 
-		// save the customer
-		currentSession.save(theCustomer);
+		// save/update the customer
+		currentSession.saveOrUpdate(theCustomer);
+	}
+
+	@Override
+	public Customer getCustomer(int theId) {
+
+		Session currentSession = sessionFactory.getCurrentSession();
+
+		// retrieve/read from database using primary key
+		Customer theCustomer = currentSession.get(Customer.class, theId);
+
+		return theCustomer;
+	}
+
+	@Override
+	public void deleteCustomer(int theId) {
+
+		Session currentSession = sessionFactory.getCurrentSession();
+
+		// delete object with primary key
+		Query theQuery = currentSession.createQuery("delete from Customer where id =:customerId");
+		
+		theQuery.setParameter("customerId", theId);
+		
+		theQuery.executeUpdate();
+
 	}
 }
